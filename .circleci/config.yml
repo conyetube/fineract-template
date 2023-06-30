@@ -9,7 +9,7 @@ commands:
           name: Setup BUILD_TAG environment variable
           command: echo 'export BUILD_TAG="build-$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}"' >> "$BASH_ENV"
       - persist_to_workspace:
-          root: ./.circleci/tags/
+          root: /home/circleci/project/.circleci/tags/
           paths:
             - tag.env
 
@@ -25,7 +25,7 @@ commands:
           name: Add code change results to bash environment
           command: |
             if [ -f "/tmp/workspace/code-changes.env" ]; then
-              cat ./.circleci/tags/tag.env >> $BASH_ENV
+              cat /home/circleci/project/tags/tag.env >> $BASH_ENV
               echo "Code change results loaded from workspace $BUILD_TAG"
 #s Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
