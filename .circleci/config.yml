@@ -9,7 +9,7 @@ commands:
           name: Setup BUILD_TAG environment variable
           command: echo 'export BUILD_TAG="build-$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}"' >> "$BASH_ENV"
       - persist_to_workspace:
-          root: /home/circleci/project/tag/
+          root: workspace
           paths:
             - tag.env
 
