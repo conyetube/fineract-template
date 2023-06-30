@@ -28,9 +28,10 @@ commands:
       - run:
           name: Add code change results to bash environment
           command: |
-            if [ -f "/tmp/cci-test/workspace/tag.env" ]; then
+            if [ -f "/tmp/workspace/tag.env" ]; then
               cat workspace/tag.env >> $BASH_ENV
               echo "Code change results loaded from workspace $BUILD_TAG"
+            fi
 #s Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
@@ -46,7 +47,7 @@ jobs:
       - generate_build_tag
       - run:
           name: "Say hello"
-          command: "echo Hello, World!"
+          command: "echo Hello, World! $BUILD_TAG"
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
