@@ -2,7 +2,32 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
+commands:
+  generate_build_tag:
+    steps:
+      - run:
+          name: Setup BUILD_TAG environment variable
+          command: echo 'export BUILD_TAG="build-$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}"' >> "$BASH_ENV"
+      - persist_to_workspace:
+          root: ./.circleci/tags/
+          paths:
+            - tag.env
+
+  # ----------------------------------------------------------------------------
+
+
+  load_build_tag:
+    description: Load the code change results from the workspace
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Add code change results to bash environment
+          command: |
+            if [ -f "/tmp/workspace/code-changes.env" ]; then
+              cat ./.circleci/tags/tag.env >> $BASH_ENV
+              echo "Code change results loaded from workspace $BUILD_TAG"
+#s Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
   say-hello:
@@ -14,6 +39,8 @@ jobs:
     # See: https://circleci.com/docs/configuration-reference/#steps
     steps:
       - checkout
+      - generate_build_tag
+      - load_build_tag
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
