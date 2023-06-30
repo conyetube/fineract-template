@@ -8,13 +8,14 @@ commands:
       - run:
           name: Setup BUILD_TAG environment variable
           command: echo 'export BUILD_TAG="build-$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}"' >> "$BASH_ENV"
-      - run: echo $BUILD_TAG >> workspace/tag.env
-      - run: cat workspace/tag.env
+      - run: mkdir -p workspace
+      - run: echo $BUILD_TAG >> workspace/tag
+      - run: cat workspace/tag
 
       - persist_to_workspace:
           root: workspace
           paths:
-            - tag.env
+            - tag
 
   # ----------------------------------------------------------------------------
 
