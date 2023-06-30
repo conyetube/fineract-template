@@ -44,7 +44,7 @@ jobs:
     steps:
       - checkout
       - generate_build_tag
-      - load_build_tag
+      #- load_build_tag
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
